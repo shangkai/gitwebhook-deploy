@@ -10,10 +10,10 @@ var port = normalizePort(process.env.PORT || '7777');
 
 var server = http.createServer(function (req, res) {
     handler(req, res, function (err) {
-        console.error('404:', err.message);
-        run_cmd('sh', ['pwd'], function(text){ console.log(text) });
+        debug('A 404 access.');
+        run_cmd('sh', ['./deploy.sh'], function(text){ debug('run_cmd:'+text) });
         res.statusCode = 404;
-        res.end('no such location')
+        res.end('no such location');
     })
 });
 server.listen(port);
@@ -22,14 +22,14 @@ server.on('listening', onListening);
 
 
 handler.on('error', function (err) {
-    console.error('Error:', err.message);
+    debug('Error:', err.message);
 });
 
 handler.on('push', function (event) {
-    console.log('Received a push event for %s to %s',
+    debug('Received a push event for %s to %s',
         event.payload.repository.name,
         event.payload.ref);
-    run_cmd('sh', ['./deploy.sh'], function(text){ console.log(text) });
+    run_cmd('sh', ['./deploy.sh'], function(text){ debug('run_cmd:'+text) });
 });
 
 /*

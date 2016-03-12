@@ -1,0 +1,12 @@
+{
+  "name": "gitwebhook-deploy",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "node deploy.js"
+  },
+  "dependencies": {
+    "debug": "~2.2.0",
+    "github-webhook-handler": "^0.5.0"
+  }
+}

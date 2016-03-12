@@ -11,7 +11,6 @@ var port = normalizePort(process.env.PORT || '7777');
 var server = http.createServer(function (req, res) {
     handler(req, res, function (err) {
         debug('A 404 access.');
-        run_deploy();
         res.statusCode = 404;
         res.end('no such location');
     })

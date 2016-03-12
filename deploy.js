@@ -11,7 +11,9 @@ var port = normalizePort(process.env.PORT || '7777');
 var server = http.createServer(function (req, res) {
     handler(req, res, function (err) {
         debug('A 404 access.');
-        run_cmd('sh', ['./deploy.sh'], function(text){ debug('run_cmd:'+text) });
+        run_cmd('./deploy.sh', function (text) {
+            debug(text)
+        });
         res.statusCode = 404;
         res.end('no such location');
     })
@@ -29,7 +31,9 @@ handler.on('push', function (event) {
     debug('Received a push event for %s to %s',
         event.payload.repository.name,
         event.payload.ref);
-    run_cmd('sh', ['./deploy.sh'], function(text){ debug('run_cmd:'+text) });
+    run_cmd('./deploy.sh', function (text) {
+        debug(text);
+    });
 });
 
 /*
@@ -43,13 +47,17 @@ handler.on('push', function (event) {
  */
 
 
-function run_cmd(cmd, args, callback) {
-    var spawn = require('child_process').spawn;
-    var child = spawn(cmd, args);
-    var resp = "";
-
-    child.stdout.on('data', function(buffer) { resp += buffer.toString(); });
-    child.stdout.on('end', function() { callback (resp) });
+function run_cmd(cmd, callback) {
+    var exec = require('child_process').exec;
+    exec(cmd, function(err, stdout, stderr) {
+        if(err){
+            callback('run_cmd err:'+err);
+        } else if(stdout){
+            callback('run_cmd stdout:'+stdout);
+        } else {
+            callback('run_cmd stderr:'+stderr);
+        }
+    });
 }
 
 /**

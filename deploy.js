@@ -1,7 +1,8 @@
 var http = require('http');
 var createHandler = require('github-webhook-handler');
 var secret = process.env.SECRET || 'myHashSecret';
-var handler = createHandler({path: '/incoming', secret: secret});
+var urlpath = process.env.URLPATH || '/incoming';
+var handler = createHandler({path: urlpath, secret: secret});
 var debug = require("debug")("gitwebhook-deploy:deploy.js");
 // 上面的 secret 保持和 GitHub 后台设置的一致
 

@@ -5,15 +5,13 @@ var handler = createHandler({path: '/incoming', secret: secret});
 var debug = require("debug")("gitwebhook-deploy:deploy.js");
 // 上面的 secret 保持和 GitHub 后台设置的一致
 
-
+var deploysh = process.env.DEPLOYSH || './deploy.sh';
 var port = normalizePort(process.env.PORT || '7777');
 
 var server = http.createServer(function (req, res) {
     handler(req, res, function (err) {
         debug('A 404 access.');
-        run_cmd('./deploy.sh', function (text) {
-            debug(text)
-        });
+        run_deploy();
         res.statusCode = 404;
         res.end('no such location');
     })
@@ -31,9 +29,7 @@ handler.on('push', function (event) {
     debug('Received a push event for %s to %s',
         event.payload.repository.name,
         event.payload.ref);
-    run_cmd('./deploy.sh', function (text) {
-        debug(text);
-    });
+    run_deploy();
 });
 
 /*
@@ -45,6 +41,12 @@ handler.on('push', function (event) {
  event.payload.issue.title)
  })
  */
+
+function run_deploy(){
+    run_cmd(deploysh, function (text) {
+        debug(text);
+    });
+}
 
 
 function run_cmd(cmd, callback) {

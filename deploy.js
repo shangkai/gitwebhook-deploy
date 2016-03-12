@@ -1,7 +1,7 @@
 var http = require('http');
 var createHandler = require('github-webhook-handler');
-var secret = process.env.SECRET || 'myHashSecret';
-var urlpath = process.env.URLPATH || '/incoming';
+var secret = process.env.GIT_SECRET || 'myHashSecret';
+var urlpath = process.env.GIT_URLPATH || '/incoming';
 var handler = createHandler({path: urlpath, secret: secret});
 var debug = require("debug")("gitwebhook-deploy:deploy.js");
 // 上面的 secret 保持和 GitHub 后台设置的一致
@@ -11,6 +11,9 @@ var port = normalizePort(process.env.PORT || '7777');
 
 var server = http.createServer(function (req, res) {
     handler(req, res, function (err) {
+        debug('urlpath='+urlpath);
+        debug('secret='+secret);
+        debug('deploysh='+deploysh);
         debug('A 404 access.');
         res.statusCode = 404;
         res.end('no such location');

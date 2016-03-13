@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ ! -n $1 ]; then
+if [ ! -n "$1" ]; then
   echo "required parameter missing."
   exit 1
 fi
@@ -20,7 +20,9 @@ fi
 echo "start deploy..."
 
 #git add . -A && git stash
-git pull origin master
+#git pull origin master
+git fetch --all  
+git reset --hard origin/master 
 
 if [ $? != 0 ]; then
     echo "$1 git pull error"

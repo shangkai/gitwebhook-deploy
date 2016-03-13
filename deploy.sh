@@ -1,16 +1,16 @@
 #!/bin/bash
 
-if [ ! -n "$1" ]; then
+if [ ! -n $1 ]; then
   echo "required parameter missing."
   exit 1
 fi
 
-if [ ! -d "$1"]; then
+if [ ! -d $1 ]; then
     echo "$1 director is not exist"
     exit 1
 fi
 
-cd $0
+cd $1
 
 if [ $? != 0 ]; then
     echo "$1 Permission denied"

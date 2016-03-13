@@ -5,7 +5,7 @@ var urlpath = process.env.GIT_URLPATH || '/incoming';
 var handler = createHandler({path: urlpath, secret: secret});//secret 保持和 GitHub 后台设置的一致
 var debug = require("debug")("gitwebhook-deploy:deploy.js");
 
-
+var deployPath = process.env.DEPLOY_PATH || '/usr/share/nginx/www';
 var deploysh = process.env.DEPLOYSH || './deploy.sh';
 var port = normalizePort(process.env.PORT || '7777');
 
@@ -43,7 +43,7 @@ handler.on('push', function (event) {
  */
 
 function run_deploy(){
-    run_cmd(deploysh, function (text) {
+    run_cmd(deploysh + ' ' + deployPath, function (text) {
         debug(text);
     });
 }
